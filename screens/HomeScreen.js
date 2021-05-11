@@ -1,172 +1,35 @@
-import React from 'react';
-import { View, Image, Text, StyleSheet, ScrollView } from 'react-native';
+import React, { useEffect, useState } from "react";
+import { View, Image, Text, StyleSheet, ScrollView } from "react-native";
+import PokeCard from '../components/PokeCard';
+import axios from 'axios';
 
 const styles = StyleSheet.create({
-    container: {
-        padding: 40,
-    },
-    pokemonImage: {
-        width: 130,
-        height: 130,
-        marginTop: -50
-    },
-    pokeCard: {
-        marginTop: 30,
-        width: 334,
-        height: 115,
-        backgroundColor: '#8BBE8A',
-        borderRadius: 10,
-        padding: 20,
-        fontSize: 12,
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'space-between'
-    },
-    pokeId: {        
-        fontWeight: 'bold',
-        color: 'rgba(23, 23, 27, 0.6)'
-    },
-    pokeName: {
-        fontSize: 26,
-        color: 'white',
-        fontWeight: 700
-    }
+  container: {
+    padding: 20,
+    width: "100%",
+  },
 });
 
-{/* <Image
-                        style={styles.pokemonImage}
-                        source={require('../assets/grass.svg')}
-                    /> */}
-
 export default function HomeScreen({ name }) {
-    return (
-        <ScrollView style={styles.container}>
-            <View style={styles.pokeCard}>
-                <View>
-                    <Text style={styles.pokeId}>#001</Text>
-                    <Text style={styles.pokeName}>{name}</Text>
-                </View>
-                <View>
-                    <Image
-                        style={styles.pokemonImage}
-                        source={{
-                            uri: 'https://cdn.bulbagarden.net/upload/2/21/001Bulbasaur.png',
-                        }}
-                    />
-                </View>
-            </View>
-            <View style={styles.pokeCard}>
-                <View>
-                    <Text style={styles.pokeId}>#001</Text>
-                    <Text style={styles.pokeName}>{name}</Text>
-                </View>
-                <View>
-                    <Image
-                        style={styles.pokemonImage}
-                        source={{
-                            uri: 'https://cdn.bulbagarden.net/upload/2/21/001Bulbasaur.png',
-                        }}
-                    />
-                </View>
-            </View>
-            <View style={styles.pokeCard}>
-                <View>
-                    <Text style={styles.pokeId}>#001</Text>
-                    <Text style={styles.pokeName}>{name}</Text>
-                </View>
-                <View>
-                    <Image
-                        style={styles.pokemonImage}
-                        source={{
-                            uri: 'https://cdn.bulbagarden.net/upload/2/21/001Bulbasaur.png',
-                        }}
-                    />
-                </View>
-            </View>
-            <View style={styles.pokeCard}>
-                <View>
-                    <Text style={styles.pokeId}>#001</Text>
-                    <Text style={styles.pokeName}>{name}</Text>
-                </View>
-                <View>
-                    <Image
-                        style={styles.pokemonImage}
-                        source={{
-                            uri: 'https://cdn.bulbagarden.net/upload/2/21/001Bulbasaur.png',
-                        }}
-                    />
-                </View>
-            </View>
-            <View style={styles.pokeCard}>
-                <View>
-                    <Text style={styles.pokeId}>#001</Text>
-                    <Text style={styles.pokeName}>{name}</Text>
-                </View>
-                <View>
-                    <Image
-                        style={styles.pokemonImage}
-                        source={{
-                            uri: 'https://cdn.bulbagarden.net/upload/2/21/001Bulbasaur.png',
-                        }}
-                    />
-                </View>
-            </View>
-            <View style={styles.pokeCard}>
-                <View>
-                    <Text style={styles.pokeId}>#001</Text>
-                    <Text style={styles.pokeName}>{name}</Text>
-                </View>
-                <View>
-                    <Image
-                        style={styles.pokemonImage}
-                        source={{
-                            uri: 'https://cdn.bulbagarden.net/upload/2/21/001Bulbasaur.png',
-                        }}
-                    />
-                </View>
-            </View>
-            <View style={styles.pokeCard}>
-                <View>
-                    <Text style={styles.pokeId}>#001</Text>
-                    <Text style={styles.pokeName}>{name}</Text>
-                </View>
-                <View>
-                    <Image
-                        style={styles.pokemonImage}
-                        source={{
-                            uri: 'https://cdn.bulbagarden.net/upload/2/21/001Bulbasaur.png',
-                        }}
-                    />
-                </View>
-            </View>
-            <View style={styles.pokeCard}>
-                <View>
-                    <Text style={styles.pokeId}>#001</Text>
-                    <Text style={styles.pokeName}>{name}</Text>
-                </View>
-                <View>
-                    <Image
-                        style={styles.pokemonImage}
-                        source={{
-                            uri: 'https://cdn.bulbagarden.net/upload/2/21/001Bulbasaur.png',
-                        }}
-                    />
-                </View>
-            </View>
-            <View style={styles.pokeCard}>
-                <View>
-                    <Text style={styles.pokeId}>#001</Text>
-                    <Text style={styles.pokeName}>{name}</Text>
-                </View>
-                <View>
-                    <Image
-                        style={styles.pokemonImage}
-                        source={{
-                            uri: 'https://cdn.bulbagarden.net/upload/2/21/001Bulbasaur.png',
-                        }}
-                    />
-                </View>
-            </View>
-        </ScrollView>
-    )
+
+  const [data, setData] = useState([]);
+
+  useEffect(() => { 
+    const getData = async () => {
+      const result = await axios.get(`https://pokeapi.co/api/v2/pokemon?limit=100&offset=0`)
+      setData(result.data.results)
+    }
+    getData();
+  }, [])
+
+  return (
+    <ScrollView style={styles.container}>
+      {
+        data.map((el, index) => (
+            <PokeCard key={index} name={el.name} id={index + 1} />
+        ))
+      }
+      
+    </ScrollView>
+  );
 }
